@@ -1,0 +1,150 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-base: #0a0a0f;
+    --bg-card: #12121a;
+    --bg-elevated: #1a1a24;
+    --accent: #7c6ff7;
+    --accent-glow: rgba(124, 111, 247, 0.4);
+    --success: #22c55e;
+    --border-subtle: rgba(255, 255, 255, 0.06);
+    --text-primary: #fafafa;
+    --text-secondary: #a1a1aa;
+    --text-muted: #71717a;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: "Inter", system-ui, sans-serif;
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+  }
+
+  ::selection {
+    background-color: rgba(124, 111, 247, 0.35);
+    color: #fff;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 99px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+@layer components {
+  .surface-card {
+    @apply bg-card rounded-2xl border border-subtle;
+  }
+
+  .surface-card-hover {
+    @apply transition-all duration-300 hover:border-accent/30 hover:shadow-glow-sm hover:-translate-y-0.5;
+  }
+
+  .btn-glow {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm
+      bg-accent text-white shadow-glow-sm
+      transition-all duration-300
+      hover:bg-accent-hover hover:shadow-glow hover:scale-[1.02]
+      active:scale-[0.98]
+      focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm
+      text-foreground-secondary border border-subtle bg-transparent
+      transition-all duration-300
+      hover:bg-white/5 hover:text-foreground hover:border-white/10
+      active:scale-[0.98];
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-accent via-[#A78BFA] to-[#C4B5FD] bg-clip-text text-transparent;
+  }
+
+  .input-field {
+    @apply w-full rounded-xl border border-subtle bg-elevated px-4 py-2.5 text-sm text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/40 transition-all disabled:opacity-50;
+  }
+
+  .textarea-field {
+    @apply w-full rounded-xl border border-subtle bg-elevated px-4 py-2.5 text-sm text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/40 transition-all disabled:opacity-50 resize-y min-h-[80px];
+  }
+
+  .select-field {
+    @apply w-full rounded-xl border border-subtle bg-elevated px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/40 disabled:opacity-50;
+  }
+
+  .label-field {
+    @apply block text-xs font-medium text-muted uppercase tracking-wider mb-2;
+  }
+
+  .alert-error {
+    @apply text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3;
+  }
+
+  .alert-success {
+    @apply text-sm text-success bg-success/10 border border-success/30 rounded-xl px-4 py-3;
+  }
+
+  .hero-gradient {
+    background: radial-gradient(
+        ellipse 80% 50% at 50% -20%,
+        rgba(124, 111, 247, 0.25),
+        transparent
+      ),
+      radial-gradient(
+        ellipse 60% 40% at 80% 50%,
+        rgba(124, 111, 247, 0.08),
+        transparent
+      ),
+      linear-gradient(180deg, #0a0a0f 0%, #0f0f18 50%, #0a0a0f 100%);
+  }
+
+  .mesh-gradient {
+    background: linear-gradient(
+      -45deg,
+      #0a0a0f,
+      #12121a,
+      #1a1033,
+      #0a0a0f,
+      #12121a
+    );
+    background-size: 400% 400%;
+    animation: gradientShift 12s ease infinite;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
