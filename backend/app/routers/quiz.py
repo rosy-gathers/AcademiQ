@@ -27,7 +27,7 @@ from app.services.quiz_service import (
 )
 from app.services.rag_service import generate_with_llm
 from app.utils.prompts import QUIZ_PROMPT
-from app.utils.users import get_or_create_user
+from app.utils.user_helpers import get_or_create_user
 
 logger = logging.getLogger(__name__)
 
@@ -189,7 +189,7 @@ async def submit_quiz_attempt(
     if not questions:
         return _error("Quiz has no questions", "EMPTY_QUIZ")
 
-    get_or_create_user(db, body.user_id, body.user_email)
+    get_or_create_user(db, str(body.user_id), body.user_email or "")
 
     score, total, percentage, wrong_concepts, results = grade_quiz_attempt(
         questions,

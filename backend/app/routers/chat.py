@@ -11,7 +11,7 @@ from app.schemas import ChatMessageIn
 from app.services.embedding_service import retrieve_chunk_citations
 from app.services.rag_service import stream_chat_response
 from app.utils.language import language_label, resolve_language
-from app.utils.users import get_or_create_user
+from app.utils.user_helpers import get_or_create_user
 
 logger = logging.getLogger(__name__)
 
@@ -75,7 +75,7 @@ async def chat_websocket(websocket: WebSocket, document_id: UUID):
                 )
                 continue
 
-            get_or_create_user(db, payload.user_id, payload.user_email)
+            get_or_create_user(db, str(payload.user_id), payload.user_email or "")
 
             lang_code, auto_detected = resolve_language(
                 payload.message,

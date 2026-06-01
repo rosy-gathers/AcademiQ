@@ -11,7 +11,7 @@ from app.schemas import GenerateNotesRequest, GenerateNotesResponse, NotesConten
 from app.services.quiz_service import safe_parse_json
 from app.services.rag_service import generate_with_llm
 from app.utils.prompts import NOTES_PROMPT
-from app.utils.users import get_or_create_user
+from app.utils.user_helpers import get_or_create_user
 
 logger = logging.getLogger(__name__)
 
@@ -88,7 +88,7 @@ async def generate_notes(
     except ValueError as exc:
         return _error(str(exc), "DOCUMENT_NOT_READY")
 
-    get_or_create_user(db, document.user_id, body.user_email)
+    get_or_create_user(db, str(document.user_id), body.user_email or "")
 
     try:
         notes_content = await _generate_notes_json(
