@@ -99,14 +99,17 @@ export async function uploadDocument(
     method: "POST",
     body: formData,
   });
-  const data = await parseResponse<DocumentUploadResponse>(res);
-  if (data.status !== "ready" || data.total_chunks < 1) {
+  const data = (await res.json()) as DocumentUploadResponse & ErrorBody;
+  if (data.document_id) {
+    return data;
+  }
+  if (!res.ok || data.error) {
     throw new ApiError(
-      "Upload finished but document indexing failed.",
-      "INDEXING_FAILED"
+      data.message ?? `Request failed (${res.status})`,
+      data.code ?? "REQUEST_FAILED"
     );
   }
-  return data;
+  throw new ApiError("Upload response missing document_id", "INVALID_RESPONSE");
 }
 
 export async function transcribeAudio(

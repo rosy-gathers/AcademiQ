@@ -12,7 +12,7 @@ import UploadProcessingTimeline, {
   type TimelineStep,
 } from "@/components/upload/UploadProcessingTimeline";
 import UploadOrganizationFields from "@/components/UploadOrganizationFields";
-import { ApiError, uploadDocument } from "@/lib/api";
+import { API_URL } from "@/lib/api";
 import type { LanguageOverride } from "@/types";
 
 type UploadStatus =
@@ -22,6 +22,16 @@ type UploadStatus =
   | "embedding"
   | "done"
   | "error";
+
+type UploadResponseBody = {
+  document_id?: string;
+  documentId?: string;
+  status?: string;
+  total_chunks?: number;
+  error?: boolean;
+  message?: string;
+  code?: string;
+};
 
 const PDF_TIMELINE_STEPS: TimelineStep[] = [
   { id: "uploading", label: "Uploading" },
@@ -65,19 +75,47 @@ export default function UploadZone({
       formData.append("folder", folder.trim());
       formData.append("tags", tagsInput.trim());
 
+      let embeddingTimer: ReturnType<typeof setTimeout> | undefined;
+
       try {
         setStatus("extracting");
-        const embeddingTimer = setTimeout(() => setStatus("embedding"), 1200);
+        embeddingTimer = setTimeout(() => setStatus("embedding"), 1200);
 
-        const data = await uploadDocument(formData);
-        clearTimeout(embeddingTimer);
+        const res = await fetch(`${API_URL}/api/documents/upload`, {
+          method: "POST",
+          body: formData,
+        });
 
-        setStatus("done");
-        setTimeout(() => router.push(`/documents/${data.document_id}`), 600);
-      } catch (err) {
+        const data = (await res.json()) as UploadResponseBody;
+        console.log("Response status:", res.status);
+        console.log("Response data:", data);
+        console.log("Upload response:", data);
+
+        const documentId = data.document_id ?? data.documentId;
+
+        if (documentId) {
+          if (embeddingTimer) clearTimeout(embeddingTimer);
+          setStatus("done");
+          setTimeout(() => router.push(`/documents/${documentId}`), 600);
+          return;
+        }
+
+        if (data.error || !res.ok) {
+          setStatus("error");
+          setErrorMessage(
+            data.message ?? `Upload failed (${res.status}). Try again.`
+          );
+          return;
+        }
+
         setStatus("error");
+        setErrorMessage("Upload failed: no document_id in response.");
+      } catch (err) {
+        if (embeddingTimer) clearTimeout(embeddingTimer);
+        setStatus("error");
+        console.error("Upload error:", err);
         setErrorMessage(
-          err instanceof ApiError ? err.message : "Upload failed. Try again."
+          err instanceof Error ? err.message : "Upload failed. Try again."
         );
       }
     },
