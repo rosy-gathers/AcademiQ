@@ -1,0 +1,38 @@
+flowchart TB
+  subgraph Client["Next.js 14 · App Router"]
+    AUTH[Supabase Auth]
+    DASH[Dashboard / Library / Saved]
+    DOC[Document Workspace]
+    DOC --> NOTES[Notes · Quiz · Exam · Chat · Transcript]
+    OFFLINE[(IndexedDB Saved Notes)]
+    DASH --> OFFLINE
+  end
+
+  subgraph API["FastAPI"]
+    REST[REST Routers]
+    WS[WebSocket Chat]
+    REST --> SVC[Services Layer]
+    WS --> SVC
+  end
+
+  subgraph Data["Persistence"]
+    PG[(PostgreSQL / SQLite)]
+    CHROMA[(ChromaDB)]
+    STORE[Supabase Storage]
+  end
+
+  subgraph AI["Models"]
+    EMB[gemini-embedding-001]
+    LLM[Gemini 2.5 Flash]
+    WHISPER[Whisper optional]
+  end
+
+  AUTH --> Client
+  Client --> REST
+  Client --> WS
+  SVC --> PG
+  SVC --> CHROMA
+  SVC --> STORE
+  SVC --> EMB
+  SVC --> LLM
+  SVC --> WHISPER

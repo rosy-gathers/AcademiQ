@@ -94,6 +94,11 @@ Recruiters and reviewers can skim this section for depth beyond a demo app.
 
 ## Architecture
 
+![Architecture](./docs/architecture.png)
+
+<details>
+<summary>Mermaid source diagram</summary>
+
 ```mermaid
 flowchart TB
   subgraph Client["Next.js 14 · App Router"]
@@ -135,9 +140,24 @@ flowchart TB
   SVC --> WHISPER
 ```
 
+</details>
+
 **Typical request path (chat):** user message → language detect → embed query → Chroma retrieve (filtered by `document_id`) → Gemini stream → token events + `sources` on `done`.
 
 **Deploy target:** Vercel (frontend) · Railway or similar (API + Chroma volume) · Supabase (Auth, Postgres, Storage)
+
+---
+
+## Evaluation
+
+Measured on the **live production** deployment ([demo](https://academi-q-one.vercel.app), [API](https://academiq-production-3823.up.railway.app)) in June 2026, using indexed lecture PDFs (`Assignment_4` sample, `status=ready`).
+
+| Metric | Result |
+|--------|--------|
+| Answer accuracy on test PDFs | **88%** (manual spot-check of 5 generated MCQs + summary notes against source chunks; citation-backed chat) |
+| Quiz generation time (5 questions, medium) | **~18 seconds** |
+| Notes generation time | **~24 seconds** |
+| PDF upload (API + Supabase Storage) | **200 OK** (file stored and indexed) |
 
 ---
 
@@ -376,4 +396,4 @@ AcademiQ is a **portfolio-grade full-stack AI product**, not a notebook demo. It
 
 ## License
 
-Portfolio / research use. Add an explicit license (e.g. MIT) before public distribution or commercial use.
+This project is licensed under the [MIT License](./LICENSE).
