@@ -172,6 +172,7 @@ class NotesContent(BaseModel):
 class GenerateNotesRequest(BaseModel):
     document_id: UUID
     language: Literal["en", "bn"]
+    user_email: str | None = None
 
 
 class GenerateNotesResponse(BaseModel):
@@ -227,6 +228,7 @@ class QuizGenerateResponse(BaseModel):
 class QuizAttemptRequest(BaseModel):
     quiz_id: UUID
     user_id: UUID
+    user_email: str | None = None
     answers: dict[str, str]  # {"0": "A", "1": "C", ...}
     mode: Literal["practice", "exam"] = "practice"
     time_limit_seconds: int | None = None
@@ -284,6 +286,7 @@ class QuizResponse(BaseModel):
 class ChatMessageIn(BaseModel):
     message: str
     user_id: UUID
+    user_email: str | None = None
     session_id: UUID | None = None
 
 

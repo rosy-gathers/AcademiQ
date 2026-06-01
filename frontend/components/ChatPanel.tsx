@@ -71,10 +71,12 @@ function TypingIndicator() {
 export default function ChatPanel({
   documentId,
   userId,
+  userEmail,
   languageOverride = "auto",
 }: {
   documentId: string;
   userId: string;
+  userEmail?: string;
   languageOverride?: string;
 }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -185,6 +187,7 @@ export default function ChatPanel({
       JSON.stringify({
         message: text,
         user_id: userId,
+        user_email: userEmail ?? null,
         session_id: sessionId,
       })
     );

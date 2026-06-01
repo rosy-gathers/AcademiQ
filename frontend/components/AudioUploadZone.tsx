@@ -40,7 +40,13 @@ const AUDIO_ACCEPT = {
   "audio/x-m4a": [".m4a"],
 };
 
-export default function AudioUploadZone({ userId }: { userId: string }) {
+export default function AudioUploadZone({
+  userId,
+  userEmail,
+}: {
+  userId: string;
+  userEmail?: string;
+}) {
   const router = useRouter();
   const [courseName, setCourseName] = useState("");
   const [folder, setFolder] = useState("");
@@ -76,6 +82,7 @@ export default function AudioUploadZone({ userId }: { userId: string }) {
       formData.append("file", file);
       formData.append("course_name", courseName.trim());
       formData.append("user_id", userId);
+      if (userEmail) formData.append("user_email", userEmail);
       formData.append("language_override", languageOverride);
       formData.append("folder", folder.trim());
       formData.append("tags", tagsInput.trim());
@@ -107,7 +114,7 @@ export default function AudioUploadZone({ userId }: { userId: string }) {
         );
       }
     },
-    [courseName, folder, tagsInput, languageOverride, userId, router]
+    [courseName, folder, tagsInput, languageOverride, userId, userEmail, router]
   );
 
   const onDrop = useCallback(

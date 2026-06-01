@@ -172,11 +172,16 @@ export async function updateDocumentOrganization(
 
 export async function generateNotes(
   documentId: string,
-  language: LanguageCode
+  language: LanguageCode,
+  userEmail?: string
 ): Promise<GenerateNotesResponse> {
   return request<GenerateNotesResponse>("/api/generate/notes", {
     method: "POST",
-    body: JSON.stringify({ document_id: documentId, language }),
+    body: JSON.stringify({
+      document_id: documentId,
+      language,
+      user_email: userEmail ?? null,
+    }),
   });
 }
 
@@ -210,6 +215,7 @@ export async function submitQuizAttempt(
   userId: string,
   answers: Record<string, string>,
   options?: {
+    userEmail?: string;
     mode?: "practice" | "exam";
     timeLimitSeconds?: number;
     elapsedSeconds?: number;
@@ -220,6 +226,7 @@ export async function submitQuizAttempt(
     body: JSON.stringify({
       quiz_id: quizId,
       user_id: userId,
+      user_email: options?.userEmail ?? null,
       answers,
       mode: options?.mode ?? "practice",
       time_limit_seconds: options?.timeLimitSeconds ?? null,

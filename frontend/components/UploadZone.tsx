@@ -30,7 +30,13 @@ const PDF_TIMELINE_STEPS: TimelineStep[] = [
   { id: "done", label: "Ready" },
 ];
 
-export default function UploadZone({ userId }: { userId: string }) {
+export default function UploadZone({
+  userId,
+  userEmail,
+}: {
+  userId: string;
+  userEmail?: string;
+}) {
   const router = useRouter();
   const [courseName, setCourseName] = useState("");
   const [folder, setFolder] = useState("");
@@ -54,6 +60,7 @@ export default function UploadZone({ userId }: { userId: string }) {
       formData.append("file", file);
       formData.append("course_name", courseName.trim());
       formData.append("user_id", userId);
+      if (userEmail) formData.append("user_email", userEmail);
       formData.append("language_override", languageOverride);
       formData.append("folder", folder.trim());
       formData.append("tags", tagsInput.trim());
@@ -74,7 +81,7 @@ export default function UploadZone({ userId }: { userId: string }) {
         );
       }
     },
-    [courseName, folder, tagsInput, languageOverride, userId, router]
+    [courseName, folder, tagsInput, languageOverride, userId, userEmail, router]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

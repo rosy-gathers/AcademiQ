@@ -11,7 +11,7 @@ import { useDashboardUser } from "@/lib/dashboard-context";
 type UploadTab = "pdf" | "audio";
 
 export default function UploadPage() {
-  const { userId } = useDashboardUser();
+  const { userId, user } = useDashboardUser();
   const [tab, setTab] = useState<UploadTab>("pdf");
 
   return (
@@ -77,7 +77,11 @@ export default function UploadPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.25 }}
       >
-        {tab === "pdf" ? <UploadZone userId={userId} /> : <AudioUploadZone userId={userId} />}
+        {tab === "pdf" ? (
+          <UploadZone userId={userId} userEmail={user.email} />
+        ) : (
+          <AudioUploadZone userId={userId} userEmail={user.email} />
+        )}
       </motion.div>
     </div>
   );

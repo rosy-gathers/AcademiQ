@@ -59,11 +59,13 @@ export default function ExamQuizCard({
   documentName,
   courseName,
   userId,
+  userEmail,
 }: {
   documentId: string;
   documentName: string;
   courseName?: string | null;
   userId: string;
+  userEmail?: string;
 }) {
   const [phase, setPhase] = useState<Phase>("setup");
   const [difficulty, setDifficulty] = useState<QuizDifficulty>("medium");
@@ -106,6 +108,7 @@ export default function ExamQuizCard({
 
       try {
         const attempt = await submitQuizAttempt(quizId, userId, answers, {
+          userEmail,
           mode: "exam",
           timeLimitSeconds,
           elapsedSeconds: elapsed,

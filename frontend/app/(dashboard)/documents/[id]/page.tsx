@@ -55,7 +55,7 @@ function DocumentPageContent() {
   const params = useParams();
   const searchParams = useSearchParams();
   const documentId = params.id as string;
-  const { userId } = useDashboardUser();
+  const { userId, user } = useDashboardUser();
 
   const [tab, setTab] = useState<DocumentTabId>("notes");
   const [document, setDocument] = useState<Document | null>(null);
@@ -201,15 +201,23 @@ function DocumentPageContent() {
           <NotesViewer
             documentId={documentId}
             languageOverride={document.language_override}
+            userEmail={user.email}
           />
         )}
-        {tab === "quiz" && <QuizCard documentId={documentId} userId={userId} />}
+        {tab === "quiz" && (
+          <QuizCard
+            documentId={documentId}
+            userId={userId}
+            userEmail={user.email}
+          />
+        )}
         {tab === "exam" && (
           <ExamQuizCard
             documentId={documentId}
             documentName={document.filename}
             courseName={document.course_name}
             userId={userId}
+            userEmail={user.email}
           />
         )}
         {tab === "chat" && (
@@ -217,6 +225,7 @@ function DocumentPageContent() {
             <ChatPanel
               documentId={documentId}
               userId={userId}
+              userEmail={user.email}
               languageOverride={document.language_override ?? "auto"}
             />
           </div>

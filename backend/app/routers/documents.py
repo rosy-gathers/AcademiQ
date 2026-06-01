@@ -28,6 +28,7 @@ from app.schemas import (
 from app.utils.document_filters import filter_documents
 from app.utils.document_labels import normalize_folder, normalize_tags, parse_tags_form
 from app.utils.language import VALID_LANGUAGE_OVERRIDES
+from app.utils.users import get_or_create_user
 from app.services.document_search_service import search_documents
 from app.services.audio_service import (
     audio_suffix_from_filename,
@@ -112,6 +113,7 @@ async def upload_document(
     file: UploadFile = File(...),
     course_name: str = Form(...),
     user_id: UUID = Form(...),
+    user_email: str = Form(""),
     language_override: str = Form("auto"),
     folder: str = Form(""),
     tags: str = Form(""),
@@ -119,6 +121,8 @@ async def upload_document(
 ):
     if not file.filename or not file.filename.lower().endswith(".pdf"):
         return _error("Only PDF files are supported", "INVALID_FILE_TYPE")
+
+    get_or_create_user(db, user_id, user_email or None)
 
     file_bytes = await file.read()
     lang = language_override if language_override in VALID_LANGUAGE_OVERRIDES else "auto"
@@ -182,6 +186,7 @@ async def transcribe_audio(
     file: UploadFile = File(...),
     course_name: str = Form(...),
     user_id: UUID = Form(...),
+    user_email: str = Form(""),
     language_override: str = Form("auto"),
     folder: str = Form(""),
     tags: str = Form(""),
@@ -189,6 +194,8 @@ async def transcribe_audio(
 ):
     if not file.filename:
         return _error("Audio file is required", "INVALID_FILE_TYPE")
+
+    get_or_create_user(db, user_id, user_email or None)
 
     suffix = audio_suffix_from_filename(file.filename)
     file_bytes = await file.read()

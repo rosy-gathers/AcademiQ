@@ -78,9 +78,11 @@ function ScoreRing({ percentage }: { percentage: number }) {
 export default function QuizCard({
   documentId,
   userId,
+  userEmail,
 }: {
   documentId: string;
   userId: string;
+  userEmail?: string;
 }) {
   const [phase, setPhase] = useState<Phase>("setup");
   const [difficulty, setDifficulty] = useState<QuizDifficulty>("medium");
@@ -130,7 +132,9 @@ export default function QuizCard({
     setLoading(true);
     setError(null);
     try {
-      const attempt = await submitQuizAttempt(quizId, userId, answers);
+      const attempt = await submitQuizAttempt(quizId, userId, answers, {
+        userEmail,
+      });
       setResults(attempt);
       setPhase("results");
     } catch (err) {

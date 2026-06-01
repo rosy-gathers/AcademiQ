@@ -21,9 +21,11 @@ import type {
 export default function NotesViewer({
   documentId,
   languageOverride = "auto",
+  userEmail,
 }: {
   documentId: string;
   languageOverride?: LanguageOverride | string;
+  userEmail?: string;
 }) {
   const [note, setNote] = useState<NoteResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -57,7 +59,7 @@ export default function NotesViewer({
     setGenerating(true);
     setError(null);
     try {
-      const data = await generateNotes(documentId, language);
+      const data = await generateNotes(documentId, language, userEmail);
       setNote({
         id: data.note_id,
         document_id: documentId,
