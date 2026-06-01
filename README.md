@@ -1,6 +1,6 @@
 # AcademiQ
 
-** Live Demo: https://academi-q-one.vercel.app**
+**Live Demo: https://academi-q-one.vercel.app**
 
 **API: https://academiq-production-3823.up.railway.app/docs**
 
@@ -397,7 +397,10 @@ AcademiQ is a **portfolio-grade full-stack AI product**, not a notebook demo. It
 ## Author
 
 Taspiha Tabassum
+
 CSE, BRAC University
+
+
 
 ---
 
