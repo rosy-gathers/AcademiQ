@@ -1,0 +1,7 @@
+.env
+.venv
+__pycache__
+*.pyc
+chroma_db
+academiq_local.db
+.pytest_cache

@@ -1,5 +1,6 @@
 import logging
 from contextlib import asynccontextmanager
+from urllib.parse import urlparse
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -25,6 +26,16 @@ async def lifespan(app: FastAPI):
     else:
         print("Google API Key loaded: (missing — set GOOGLE_API_KEY in backend/.env)")
     print(f"Gemini model: {settings.GEMINI_MODEL}")
+    if settings.USE_LOCAL_DB:
+        logger.warning("USE_LOCAL_DB=true — using SQLite, not Supabase Postgres")
+    else:
+        parsed = urlparse(settings.DATABASE_URL)
+        logger.info(
+            "Database target: postgresql host=%s port=%s db=%s",
+            parsed.hostname,
+            parsed.port,
+            (parsed.path or "").lstrip("/"),
+        )
 
     try:
         Base.metadata.create_all(bind=engine)

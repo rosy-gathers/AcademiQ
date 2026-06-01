@@ -10,7 +10,8 @@ _ENV_FILE = Path(__file__).resolve().parent.parent / ".env"
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=str(_ENV_FILE),
+        # Only load backend/.env when present (local dev). Railway uses service env vars.
+        env_file=str(_ENV_FILE) if _ENV_FILE.is_file() else None,
         env_file_encoding="utf-8",
         extra="ignore",
     )

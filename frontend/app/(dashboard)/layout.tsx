@@ -9,6 +9,7 @@ import DashboardSidebar, {
 } from "@/components/dashboard/DashboardSidebar";
 import OfflineBanner from "@/components/OfflineBanner";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
+import { syncUser } from "@/lib/api";
 import { DashboardProvider } from "@/lib/dashboard-context";
 import { supabase } from "@/lib/supabase";
 
@@ -29,7 +30,13 @@ export default function DashboardLayout({
         router.replace("/login");
         return;
       }
-      setUser(data.session.user);
+      const sessionUser = data.session.user;
+      try {
+        await syncUser(sessionUser.id, sessionUser.email ?? "");
+      } catch {
+        // Non-fatal; upload also provisions the user row.
+      }
+      setUser(sessionUser);
       setLoading(false);
     };
     init();
@@ -40,7 +47,9 @@ export default function DashboardLayout({
       if (!session?.user) {
         router.replace("/login");
       } else {
-        setUser(session.user);
+        const sessionUser = session.user;
+        syncUser(sessionUser.id, sessionUser.email ?? "").catch(() => undefined);
+        setUser(sessionUser);
       }
     });
 

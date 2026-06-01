@@ -159,6 +159,12 @@ async def upload_document(
             return _error("No extractable text found in PDF", "EMPTY_PDF")
 
         total_chunks = await _index_document_text(db, document, full_text)
+        if document.status != "ready" or total_chunks == 0:
+            return _error(
+                "Document was stored but indexing failed. Check GOOGLE_API_KEY and ChromaDB.",
+                "INDEXING_FAILED",
+                status_code=500,
+            )
         return DocumentUploadResponse(
             document_id=document.id,
             status=document.status,

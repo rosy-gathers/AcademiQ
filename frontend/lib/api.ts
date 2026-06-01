@@ -79,6 +79,19 @@ export async function deleteDocument(
   return parseResponse(res);
 }
 
+export async function syncUser(
+  userId: string,
+  userEmail: string
+): Promise<void> {
+  await request("/api/auth/sync-user", {
+    method: "POST",
+    body: JSON.stringify({
+      user_id: userId,
+      user_email: userEmail,
+    }),
+  });
+}
+
 export async function uploadDocument(
   formData: FormData
 ): Promise<DocumentUploadResponse> {
@@ -86,7 +99,14 @@ export async function uploadDocument(
     method: "POST",
     body: formData,
   });
-  return parseResponse<DocumentUploadResponse>(res);
+  const data = await parseResponse<DocumentUploadResponse>(res);
+  if (data.status !== "ready" || data.total_chunks < 1) {
+    throw new ApiError(
+      "Upload finished but document indexing failed.",
+      "INDEXING_FAILED"
+    );
+  }
+  return data;
 }
 
 export async function transcribeAudio(
