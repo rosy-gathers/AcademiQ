@@ -1,6 +1,6 @@
 # AcademiQ
 
-**🚀 Live Demo: https://academi-q-one.vercel.app**
+** Live Demo: https://academi-q-one.vercel.app**
 
 **API: https://academiq-production-3823.up.railway.app/docs**
 
@@ -391,6 +391,13 @@ docker run -p 8000:8000 --env-file .env -v ./chroma_db:/app/chroma_db academiq-a
 ## Research & Product Context
 
 AcademiQ is a **portfolio-grade full-stack AI product**, not a notebook demo. It demonstrates how to combine RAG, structured generation, spaced repetition, analytics, and bilingual UX in one coherent student workflow—relevant to EdTech, LLM application engineering, and emerging-market product design.
+
+---
+
+## Author
+
+Taspiha Tabassum
+CSE, BRAC University
 
 ---
 
