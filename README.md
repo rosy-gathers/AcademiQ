@@ -1,5 +1,9 @@
 # AcademiQ
 
+**🚀 Live Demo: https://academi-q-one.vercel.app**
+
+**API: https://academiq-production-3823.up.railway.app/docs**
+
 **A production-style, bilingual AI academic copilot for university students.**
 
 AcademiQ ingests lecture PDFs and audio, indexes them with retrieval-augmented generation (RAG), and delivers grounded study notes, adaptive quizzes, spaced-repetition flashcards, and a streaming document tutor—in **English and Bengali**. Built as a full-stack reference for multilingual EdTech: strict per-user isolation, citation-backed answers and an offline-first reading path for saved material.
